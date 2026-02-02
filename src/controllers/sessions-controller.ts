@@ -1,6 +1,8 @@
 import { Request, Response } from 'express';
-import { prisma } from "@/database/prisma"
 import { AppError } from '@/utils/AppError';
+import { authConfig } from '@/configs/auth';
+import { prisma } from "@/database/prisma"
+import { sign } from 'jsonwebtoken';
 import { compare } from 'bcrypt';
 import { z } from "zod"
 
@@ -27,7 +29,19 @@ class SessionsController{
       throw new AppError("E-mail or password incorrect", 401)
     }
 
-    response.status(201).json({ message: "Session created successfully" })
+    //From authConfig, retrieve secret and expiresIn
+    const { secret, expiresIn } = authConfig.jwt
+
+    //Generate JWT token
+    const token = sign({ role: user.role }, secret, {
+      subject: user.id,
+      expiresIn
+    })
+
+    //Return token and user data (without password)
+    const { password: _, ...userWithoutPassword } = user
+
+    response.status(201).json({ token, user: userWithoutPassword })
   }
 }
 
