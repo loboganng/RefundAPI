@@ -1,5 +1,8 @@
+import { AppError } from "@/utils/AppError"
 import { Request, Response } from "express"
+import { prisma } from "@/database/prisma"
 import { UserRole } from "@prisma/client"
+import { hash } from "bcrypt"
 import { z } from "zod"
 
 class UsersController {
@@ -11,16 +14,30 @@ class UsersController {
       role: z.enum([UserRole.employee, UserRole.manager]).default(UserRole.employee)
     })
 
-    // const { name, email, password, role } = bodySchema.parse(request.body)
-    const result = bodySchema.safeParse(request.body)
+    //Deestructuring and validating request body
+    const { name, email, password, role } = bodySchema.parse(request.body)
 
-    if (!result.success) {
-      return response.status(400).json({ errors: result.error.flatten() })
+    //Check if user with same email already exists
+    const userWithSameEmail = await prisma.user.findFirst({ where: { email } })
+
+    //If existis, throw an error
+    if (userWithSameEmail) {
+      throw new AppError("E-mail already registeres")
     }
 
-    const { name, email, password, role } = result.data
+    //Hashing password
+    const hashedPassword = await hash(password, 10)
 
-    response.json({ name, email, password, role })
+    await prisma.user.create({
+      data: {
+        name,
+        email,
+        password: hashedPassword,
+        role
+      }
+    })
+
+    response.status(201).json({ message: "User created successfully" })
   }
 }
 

@@ -9,8 +9,8 @@ const app = express()
 app.use(cors())
 app.use(express.json())
 
-app.use(errorHandling)
 app.use(routes)
+app.use(errorHandling)
 
 // app.get("/", (req, res) => {
 
