@@ -8,8 +8,14 @@ const refundsController = new RefundsController()
 
 refundsRoutes.post(
   "/", 
-  verifyUserAuthorization(["employee"]),
+  verifyUserAuthorization(["employee"]),  //Middleware to verify if user has employee role
   refundsController.create
+)
+
+refundsRoutes.get(
+  "/",
+  verifyUserAuthorization(["manager"]), //Middleware to verify if user has manager role
+  refundsController.index
 )
 
 export { refundsRoutes }
