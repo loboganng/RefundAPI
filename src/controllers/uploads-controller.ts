@@ -20,7 +20,7 @@ class UploadsController {
           .refine(
             (type) => 
               uploadConfig.ACCEPTED_IMAGE_TYPES.includes(type), 
-            `File type is not accepted. Accepted fily types: ${uploadConfig.ACCEPTED_IMAGE_TYPES}`
+            `File type is not accepted. Accepted file types: ${uploadConfig.ACCEPTED_IMAGE_TYPES}`
           ),
         size: 
           z.number()
