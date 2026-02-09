@@ -18,4 +18,10 @@ refundsRoutes.get(
   refundsController.index
 )
 
+refundsRoutes.get(
+  "/:id", 
+  verifyUserAuthorization(["employee", "manager"]), 
+  refundsController.show
+)
+
 export { refundsRoutes }
