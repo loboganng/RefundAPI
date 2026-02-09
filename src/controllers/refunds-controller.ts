@@ -43,12 +43,20 @@ class RefundsController{
   async index (request: Request, response: Response){
     //Schema to retrieve a single optional user
     const querySchema = z.object({
-      name: z.string().optional().default("")
+      name: z.string().optional().default(""),
+      page: z.coerce.number().optional().default(1),  //First page by default
+      perPage: z.coerce.number().optional().default(10),  //10 items per page by default
     })
 
-    const { name } = querySchema.parse(request.query)
+    const { name, page, perPage } = querySchema.parse(request.query)
 
+    //Calculating skip values
+    const skip = (page -1) * perPage
+
+    //Finding refunds with pagination and optional name filtering
     const refunds = await prisma.refunds.findMany({
+      skip, //Property to skip items for pagination
+      take: perPage,  //Property to limit number of items per page
       //Object to filter refunds by user name using a contains query
       where: {
         user: {
@@ -61,7 +69,28 @@ class RefundsController{
       include: { user: true } //Including user data in the response
     })
 
-    response.json(refunds)
+    //Get total count of refunds for pagination purposes
+    const totalRecords = await prisma.refunds.count({
+      where: {
+        user: {
+          name: {
+            contains: name.trim(),
+          }
+        }
+      }
+    })
+
+    const totalPages = Math.ceil(totalRecords / perPage)
+
+    response.json({
+      refunds,
+      pagination: {
+        page,
+        perPage,
+        totalRecords,
+        totalPages: totalPages > 0 ? totalPages : 1
+      }
+    })
   }
 } 
 
