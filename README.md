@@ -1,4 +1,4 @@
-# RefundAPI
+# **RefundAPI**
 
 RefundAPI is a Node.js + TypeScript backend for managing refund requests. It supports user accounts, authentication, role-based access control, and receipt uploads. Built with Express, Prisma (SQLite), JWT, and Zod for validation.
 
@@ -11,7 +11,7 @@ RefundAPI is a Node.js + TypeScript backend for managing refund requests. It sup
 
 ---
 
-## Table of Contents
+## **Table of Contents**
 
 - [Features](#features)
 - [Tech Stack](#tech-stack)
@@ -29,7 +29,7 @@ RefundAPI is a Node.js + TypeScript backend for managing refund requests. It sup
 
 ---
 
-## Features
+## **Features**
 
 - User registration with hashed passwords and role assignment (**employee** or **manager**)
 - JWT-based authentication with protected routes
@@ -54,7 +54,12 @@ RefundAPI is a Node.js + TypeScript backend for managing refund requests. It sup
 
 ---
 
-## Tech Stack
+## **Tech Stack**
+
+| Backend | Database |
+|---------|----------|
+| **Node.js, Express, TypeScript** | **Prisma + SQLite** |
+| **Zod (Validation)** | |
 
 - **Express**
 - **TypeScript**
@@ -68,7 +73,7 @@ RefundAPI is a Node.js + TypeScript backend for managing refund requests. It sup
 
 ---
 
-## Architecture & Data Model
+## **Architecture & Data Model**
 
 - **User 1:N Refunds**
 - **User fields:** id (UUID), email, password (hashed), role (employee | manager)
@@ -77,7 +82,7 @@ RefundAPI is a Node.js + TypeScript backend for managing refund requests. It sup
 
 ---
 
-## Authentication & Authorization
+## **Authentication & Authorization**
 
 - Login endpoint returns a JWT that embeds the user’s role
 - Protected routes require:  
@@ -89,7 +94,7 @@ RefundAPI is a Node.js + TypeScript backend for managing refund requests. It sup
 
 ---
 
-## Refunds
+## **Refunds**
 
 - **Create Refund:** name, category, amount, uploaded filename (receipt)
 - **List Refunds:** paginated (page, limit), optional search by user name
@@ -97,7 +102,7 @@ RefundAPI is a Node.js + TypeScript backend for managing refund requests. It sup
 
 ---
 
-## Uploads
+## **Uploads**
 
 - Uses **Multer** for handling multipart form data
 - Validation:
@@ -109,7 +114,7 @@ RefundAPI is a Node.js + TypeScript backend for managing refund requests. It sup
 
 ---
 
-## Database
+## **Database**
 
 - ORM: **Prisma**
 - Database: **SQLite (`dev.db`)**
@@ -118,15 +123,15 @@ RefundAPI is a Node.js + TypeScript backend for managing refund requests. It sup
 
 ---
 
-## Getting Started
+## **Getting Started**
 
-### Prerequisites
+### **Prerequisites**
 
 - Node.js 14+  
 - npm or yarn  
 - SQLite (included via Prisma)
 
-### Installation
+### **Installation**
 
 ```bash
 git clone https://github.com/yourusername/refundapi.git
@@ -134,19 +139,19 @@ cd refundapi
 npm install
 ```
 
-### Run Locally
+### **Run Locally**
 Default server: http://localhost/3333
 ```bash
 npm run dev
 ```
 
-### Database Migrations
+### **Database Migrations**
 ```bash
 npx prisma generate
 npx prisma migrate dev --name init
 ```
 
-### Validation & Errors
+### **Validation & Errors**
 ZOD handles request validation.
 <br>
 Returns consistent JSON error payloads:
